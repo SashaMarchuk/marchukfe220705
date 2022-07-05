@@ -1,24 +1,105 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
+import Chart from "./components/Chart/Chart";
+
+export interface ICharts {
+  name: string;
+  time: number;
+  percentageWidth?: number;
+  startPercentageWidth?: number;
+  endPercentageWidth?: number;
+}
 
 function App() {
+  const charts: ICharts[] = [
+    { name: "LandingPage", time: 7.4 },
+    { name: "Configurator", time: 0.2 },
+    { name: "Check-out", time: 7.0 },
+    { name: "Deal", time: 3.8 },
+  ];
+
+  const [chartsList, setChartsList] = useState<ICharts[]>(charts);
+
+  useEffect(() => {
+    recalculateCharts(charts);
+  }, []);
+
+  const calcPercentage = (time: number, fullTime: number) => {
+    return (time / fullTime) * 100;
+  };
+
+  const calcSumTime = (arr: ICharts[]) => {
+    const newSumTime = arr.reduce(
+      (accumulator: number, currentValue: ICharts) => {
+        return toFixNumber(accumulator + currentValue.time);
+      },
+      0
+    );
+    return newSumTime;
+  };
+
+  const recalculateCharts = (arrList = chartsList) => {
+    const newChartsList: ICharts[] = [];
+
+    const newSumTime = calcSumTime(arrList);
+
+    arrList.forEach((item, index) => {
+      const startPercentageWidth =
+        (!!index && newChartsList[index - 1].endPercentageWidth) || 0;
+      const percentageWidth = toFixNumber(
+        calcPercentage(item.time, newSumTime)
+      );
+      const endPercentageWidth = toFixNumber(
+        startPercentageWidth + percentageWidth
+      );
+
+      const obj = {
+        ...item,
+        startPercentageWidth,
+        percentageWidth,
+        endPercentageWidth,
+      };
+      newChartsList.push(obj);
+    });
+    setChartsList([...newChartsList]);
+  };
+
+  const shuffleChart = () => {
+    const newChartList = chartsList.sort(() => Math.random() - 0.5);
+    recalculateCharts(newChartList);
+  };
+
+  const setRandomValue = () => {
+    const newChartList = chartsList.map((item) => {
+      const time = toFixNumber(Math.random() * 10);
+      return { ...item, time };
+    });
+    recalculateCharts(newChartList);
+  };
+
+  const toFixNumber = (num: number, toFixedVal: number = 1) =>
+    +num.toFixed(toFixedVal);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <div className="app-title title">Spend Time (Seconds)</div>
+      {chartsList.map((item, index) => {
+        return (
+          <Chart
+            key={index}
+            time={item.time}
+            name={item.name}
+            percentageWidth={item.percentageWidth}
+            startPercentageWidth={item.startPercentageWidth}
+          />
+        );
+      })}
+      <button className="app-btn" onClick={shuffleChart}>
+        Shuffle
+      </button>
+      <button className="app-btn" onClick={setRandomValue}>
+        Random value
+      </button>
     </div>
   );
 }
