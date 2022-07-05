@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import Chart from "./components/Chart/Chart";
 
@@ -17,6 +17,9 @@ function App() {
     { name: "Check-out", time: 7.0 },
     { name: "Deal", time: 3.8 },
   ];
+
+  const buttonRandomValue = useRef<HTMLButtonElement | null>(null);
+  const buttonShuffle = useRef<HTMLButtonElement | null>(null);
 
   const [chartsList, setChartsList] = useState<ICharts[]>(charts);
 
@@ -80,6 +83,13 @@ function App() {
   const toFixNumber = (num: number, toFixedVal: number = 1) =>
     +num.toFixed(toFixedVal);
 
+  useEffect(() => {
+    setInterval(() => {
+      buttonRandomValue?.current?.click();
+      setTimeout(() => buttonShuffle?.current?.click(), 15000);
+    }, 30000);
+  }, []);
+
   return (
     <div className="app">
       <div className="app-title title">Spend Time (Seconds)</div>
@@ -94,10 +104,14 @@ function App() {
           />
         );
       })}
-      <button className="app-btn" onClick={shuffleChart}>
+      <button className="app-btn" onClick={shuffleChart} ref={buttonShuffle}>
         Shuffle
       </button>
-      <button className="app-btn" onClick={setRandomValue}>
+      <button
+        className="app-btn"
+        onClick={setRandomValue}
+        ref={buttonRandomValue}
+      >
         Random value
       </button>
     </div>
