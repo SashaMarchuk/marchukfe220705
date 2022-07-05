@@ -4,7 +4,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you can run following commands in terminal:
 
 ### `npm start`
 
@@ -39,8 +39,14 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+To run the project you need to run following commands in the project directory in terminal:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. npm install
+2. npm run
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To run test you need to run following commands in the project directory in terminal:
+
+1. npm install
+2. npm run test
+
+Have fun)
