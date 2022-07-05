@@ -10,7 +10,7 @@ const Chart: FC<ICharts> = ({
 }) => (
   <div className="chart">
     <div className="chart__title">
-      <span>{name}</span>
+      <span data-testid="valueName">{name}</span>
     </div>
     <div className="chart__container">
       <div
@@ -20,7 +20,9 @@ const Chart: FC<ICharts> = ({
           marginLeft: `${startPercentageWidth}%`,
         }}
       >
-        <div className="container--value">{time}</div>
+        <div data-testid="valueTime" className="container--value">
+          {time}
+        </div>
       </div>
     </div>
   </div>
