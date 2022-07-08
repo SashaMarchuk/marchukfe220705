@@ -48,19 +48,18 @@ function App() {
 
     arrList.forEach((item, index) => {
       const startPercentageWidth =
-        (!!index && newChartsList[index - 1].endPercentageWidth) || 0;
+        (!!index &&
+          (newChartsList?.[index - 1]?.startPercentageWidth || 0) +
+            (newChartsList?.[index - 1]?.percentageWidth || 0)) ||
+        0;
       const percentageWidth = toFixNumber(
         calcPercentage(item.time, newSumTime)
-      );
-      const endPercentageWidth = toFixNumber(
-        startPercentageWidth + percentageWidth
       );
 
       const obj = {
         ...item,
         startPercentageWidth,
         percentageWidth,
-        endPercentageWidth,
       };
       newChartsList.push(obj);
     });
